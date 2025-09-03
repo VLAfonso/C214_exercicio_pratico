@@ -178,9 +178,9 @@ public class ConexaoBDTest {
 
 
 
-    // Testes de mostrar resultado
+    // Testes de percorrer resultado
     @Test
-    public void testeMostrarResultado() throws SQLException {
+    public void testePercorrerResultado() throws SQLException {
         // Informações para conectar ao bd
         String url = "jdbc:mysql://localhost:3306/statlog";
         String user = "root";
@@ -229,7 +229,7 @@ public class ConexaoBDTest {
         assertEquals(resultadoEsperado, resultados);
     }
     @Test (expected = SQLException.class)
-    public void testeMostrarSemResultSet() throws SQLException {
+    public void testePercorrerSemResultSet() throws SQLException {
         // Informações para conectar ao bd
         String url = "jdbc:mysql://localhost:3306/statlog";
         String user = "root";
@@ -242,7 +242,7 @@ public class ConexaoBDTest {
         // Criação do statement
         conexaobd.criarStatement();
 
-        // Mostrar resultados
+        // Percorrer resultados
         conexaobd.percorrerResultados();
     }
 
@@ -250,7 +250,7 @@ public class ConexaoBDTest {
 
     // Teste de encerrar conexão
     @Test
-    public void testEncerrar() throws SQLException {
+    public void testeEncerrar() throws SQLException {
         // Informações para conectar ao bd
         String url = "jdbc:mysql://localhost:3306/statlog";
         String user = "root";
@@ -266,7 +266,7 @@ public class ConexaoBDTest {
         // Fazer um select das 5 primeiras linhas do dataset
         conexaobd.select("germancredit", 5);
 
-        // Mostrar resultados
+        // Percorrer resultados
         conexaobd.percorrerResultados();
 
         // Encerrar conexão
@@ -275,7 +275,7 @@ public class ConexaoBDTest {
         assertTrue(statusEncerramento);
     }
     @Test
-    public void testEncerrarSemCriacao() throws SQLException {
+    public void testeEncerrarSemCriacao() throws SQLException {
         // Informações para conectar ao bd
         String url = "jdbc:mysql://localhost:3306/statlog";
         String user = "root";
