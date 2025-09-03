@@ -1,10 +1,16 @@
 package br.inatel.cdg;
 
-import br.inatel.cdg.ConexaoBD;
 import org.junit.Test;
 
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ConexaoBDTest {
     // Testes de conexão
@@ -17,7 +23,9 @@ public class ConexaoBDTest {
 
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
-        conexaobd.conectar();
+        boolean statusConexao = conexaobd.conectar();
+
+        assertTrue(statusConexao);
     }
     @Test (expected = SQLException.class)
     public void testeURLInvalida() throws SQLException {
@@ -79,7 +87,9 @@ public class ConexaoBDTest {
         conexaobd.conectar();
 
         // Criação do statement
-        conexaobd.criarStatement();
+        boolean statusStatement = conexaobd.criarStatement();
+
+        assertTrue(statusStatement);
     }
     @Test (expected = SQLException.class)
     public void testeStatementSemConectar() throws SQLException {
@@ -113,7 +123,9 @@ public class ConexaoBDTest {
         conexaobd.criarStatement();
 
         // Fazer um select das 5 primeiras linhas do dataset
-        conexaobd.select("germancredit", 5);
+        boolean statusSelect = conexaobd.select("germancredit", 5);
+
+        assertTrue(statusSelect);
     }
     @Test (expected = SQLException.class)
     public void testSelectSemStatement() throws SQLException {
@@ -182,10 +194,39 @@ public class ConexaoBDTest {
         conexaobd.criarStatement();
 
         // Fazer um select das 5 primeiras linhas do dataset
-        conexaobd.select("germancredit", 5);
+        conexaobd.select("germancredit", 1);
 
         // Mostrar resultados
-        conexaobd.mostrarResultados();
+        List<Map<String, Object>> resultados = conexaobd.percorrerResultados();
+
+        // Resultado esperado
+        List<Map<String, Object>> resultadoEsperado = new ArrayList<>();
+        Map<String, Object> linha = new LinkedHashMap<>();
+        linha.put("id", 1);
+        linha.put("laufkont", 1);
+        linha.put("laufzeit", 18);
+        linha.put("moral", 4);
+        linha.put("verw", 2);
+        linha.put("hoehe", 1049);
+        linha.put("sparkont", 1);
+        linha.put("beszeit", 2);
+        linha.put("rate", 4);
+        linha.put("famges", 2);
+        linha.put("buerge", 1);
+        linha.put("wohnzeit", 4);
+        linha.put("verm", 2);
+        linha.put("alter", 21);
+        linha.put("weitkred", 3);
+        linha.put("wohn", 1);
+        linha.put("bishkred", 1);
+        linha.put("beruf", 3);
+        linha.put("pers", 2);
+        linha.put("telef", 1);
+        linha.put("gastarb", 2);
+        linha.put("kredit", 1);
+        resultadoEsperado.add(linha);
+
+        assertEquals(resultadoEsperado, resultados);
     }
     @Test (expected = SQLException.class)
     public void testeMostrarSemResultSet() throws SQLException {
@@ -202,7 +243,7 @@ public class ConexaoBDTest {
         conexaobd.criarStatement();
 
         // Mostrar resultados
-        conexaobd.mostrarResultados();
+        conexaobd.percorrerResultados();
     }
 
 
@@ -226,10 +267,12 @@ public class ConexaoBDTest {
         conexaobd.select("germancredit", 5);
 
         // Mostrar resultados
-        conexaobd.mostrarResultados();
+        conexaobd.percorrerResultados();
 
         // Encerrar conexão
-        conexaobd.encerrar();
+        boolean statusEncerramento = conexaobd.encerrar();
+
+        assertTrue(statusEncerramento);
     }
     @Test
     public void testEncerrarSemCriacao() throws SQLException {

@@ -1,6 +1,10 @@
 package br.inatel.cdg;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ConexaoBD {
     // Informações para conectar ao bd
@@ -18,54 +22,66 @@ public class ConexaoBD {
     }
 
     // Conexão com o bd
-    public void conectar() throws SQLException {
+    public boolean conectar() throws SQLException {
         connection = DriverManager.getConnection(url, user, password);
+
+        return (connection != null && connection.isValid(2));
     }
 
     // Criação do statement
-    public void criarStatement() throws SQLException {
-        if (connection == null)
+    public boolean criarStatement() throws SQLException {
+        if (connection == null || connection.isClosed())
             throw new SQLException();
-
-        statement = connection.createStatement();
+        else {
+            statement = connection.createStatement();
+            return true;
+        }
     }
 
     // Fazer um select das n primeiras linhas do dataset
-    public void select(String tabela, Integer qtd) throws SQLException {
-        if (statement == null)
+    public boolean select(String tabela, Integer qtd) throws SQLException {
+        if (statement == null || statement.isClosed() || connection.isClosed())
             throw new SQLException();
-
-        String query = "SELECT * FROM "+ tabela +" LIMIT "+String.valueOf(qtd);
-        resultSet = statement.executeQuery(query);
+        else {
+            String query = "SELECT * FROM "+ tabela +" LIMIT "+String.valueOf(qtd);
+            resultSet = statement.executeQuery(query);
+            return true;
+        }
     }
 
-    // Mostrar resultados
-    public void mostrarResultados() throws SQLException {
-        if (resultSet == null)
+    // Percorrer resultados
+    public List<Map<String, Object>> percorrerResultados() throws SQLException {
+        if (resultSet == null || resultSet.isClosed() || statement.isClosed() || connection.isClosed())
             throw new SQLException();
+        else {
+            ResultSetMetaData metaData = resultSet.getMetaData(); // pegar informações do dataset
+            int columnCount = metaData.getColumnCount(); // pegar num de colunas do dataset
 
-        ResultSetMetaData metaData = resultSet.getMetaData(); // pegar informações do dataset
-        int columnCount = metaData.getColumnCount(); // pegar num de colunas do dataset
-
-        // Percorrer colunas e mostrar dados
-        while (resultSet.next()){
-            for (int i = 1; i <= columnCount; i++) {
-                System.out.println(metaData.getColumnName(i) + " = " + resultSet.getInt(i));
+            // Percorrer colunas e salvar dados
+            List<Map<String, Object>> resultados = new ArrayList<>();
+            while (resultSet.next()){
+                Map<String, Object> linha = new LinkedHashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    linha.put(metaData.getColumnName(i), resultSet.getObject(i));
+                }
+                resultados.add(linha);
             }
-            System.out.println(" ");
+            return resultados;
         }
     }
 
     // Encerrar conexão com o bd
-    public void encerrar() throws SQLException {
-        if(resultSet != null)
+    public boolean encerrar() throws SQLException {
+        if(resultSet != null && !resultSet.isClosed())
             resultSet.close();
 
-        if(statement != null)
+        if(statement != null && !statement.isClosed())
             statement.close();
 
-        if(connection != null)
+        if(connection != null && !connection.isClosed())
             connection.close();
+
+        return true;
     }
 
 }

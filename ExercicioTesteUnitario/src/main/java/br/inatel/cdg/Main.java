@@ -23,7 +23,7 @@ public class Main {
         conexaobd.select("germancredit", 5);
 
         // Mostrar resultados
-        conexaobd.mostrarResultados();
+        conexaobd.percorrerResultados();
 
         // Encerrar conexão
         conexaobd.encerrar();
