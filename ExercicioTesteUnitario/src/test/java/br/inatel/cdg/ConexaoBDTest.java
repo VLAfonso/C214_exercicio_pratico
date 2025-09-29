@@ -12,14 +12,14 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 public class ConexaoBDTest {
+    // Informações para conectar ao bd
+    private String url = System.getenv("URL");
+    private String user = System.getenv("USER");
+    private String password = System.getenv("USER_PASSWORD");
+
     // Testes de conexão
     @Test
     public void testeConexaoValida() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         boolean statusConexao = conexaobd.conectar();
@@ -28,10 +28,7 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLException.class)
     public void testeURLInvalida() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "urlInvalida";
-        String user = "root";
-        String password = "root";
+        url = "urlInvalida";
 
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
@@ -39,10 +36,7 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLSyntaxErrorException.class)
     public void testeDatabaseInvalido() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/databaseInvalido";
-        String user = "root";
-        String password = "root";
+        url = "jdbc:mysql://localhost:3306/databaseInvalido";
 
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
@@ -51,9 +45,7 @@ public class ConexaoBDTest {
     @Test (expected = SQLException.class)
     public void testeUserInvalido() throws SQLException {
         // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "userInvalido";
-        String password = "root";
+        user = "userInvalido";
 
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
@@ -61,10 +53,7 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLException.class)
     public void testePasswordInvalida() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "senhaInvalida";
+        password = "senhaInvalida";
 
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
@@ -76,11 +65,6 @@ public class ConexaoBDTest {
     // Testes da criação do statement
     @Test
     public void testeCriarStatement() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -92,11 +76,6 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLException.class)
     public void testeStatementSemConectar() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
 
@@ -109,11 +88,6 @@ public class ConexaoBDTest {
     // Testes do select
     @Test
     public void testSelect() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -128,11 +102,6 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLException.class)
     public void testSelectSemStatement() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -142,11 +111,6 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLSyntaxErrorException.class)
     public void testSelectTabelaInvalida() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -160,11 +124,6 @@ public class ConexaoBDTest {
 
     @Test (expected = SQLSyntaxErrorException.class)
     public void testSelectQtdInvalida() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -178,11 +137,6 @@ public class ConexaoBDTest {
 
     @Test(expected = SQLSyntaxErrorException.class)
     public void testSelectQtdNull() throws SQLException{
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -197,11 +151,6 @@ public class ConexaoBDTest {
     //Testes para seleção de dados dos indivíduos com maiores créditos
     @Test
     public void testOkayAnalyzeByCredit() throws SQLException{
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -217,11 +166,6 @@ public class ConexaoBDTest {
 
     @Test
     public void testWrongVariableAnalyzeByCredit() throws SQLException{
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -237,11 +181,6 @@ public class ConexaoBDTest {
 
     @Test(expected = SQLException.class)
     public void testNoStatementAnalyzeByCredit() throws SQLException{
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -253,11 +192,6 @@ public class ConexaoBDTest {
     // Testes de percorrer resultado
     @Test
     public void testePercorrerResultado() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -302,11 +236,6 @@ public class ConexaoBDTest {
     }
     @Test (expected = SQLException.class)
     public void testePercorrerSemResultSet() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -320,11 +249,6 @@ public class ConexaoBDTest {
 
     @Test(expected = SQLException.class)
     public void testePercorrerSemStatementSet() throws SQLException{
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -336,11 +260,6 @@ public class ConexaoBDTest {
     // Teste de encerrar conexão
     @Test
     public void testeEncerrar() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
         conexaobd.conectar();
@@ -361,11 +280,6 @@ public class ConexaoBDTest {
     }
     @Test
     public void testeEncerrarSemCriacao() throws SQLException {
-        // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
-
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
 

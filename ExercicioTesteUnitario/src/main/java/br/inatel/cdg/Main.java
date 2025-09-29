@@ -8,9 +8,9 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) throws SQLException {
         // Informações para conectar ao bd
-        String url = "jdbc:mysql://localhost:3306/statlog";
-        String user = "root";
-        String password = "root";
+        String url = System.getenv("URL");
+        String user = System.getenv("USER");
+        String password = System.getenv("USER_PASSWORD");
 
         // Conexão com o bd
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
