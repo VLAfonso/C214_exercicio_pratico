@@ -49,6 +49,21 @@ public class ConexaoBD {
         }
     }
 
+    // Fazer um filtro para ordenar uma determinada informação das pessoas de acordo com os maiores créditos
+    public boolean analyzeByCredit(String tabela, String variable) throws SQLException{
+        if (statement == null || statement.isClosed() || connection.isClosed())
+            throw new SQLException();
+        else {
+            try {
+                String query = "SELECT " + variable + " FROM " + tabela + " ORDER BY kredit DESC";
+                resultSet = statement.executeQuery(query);
+                return true;
+            }catch (SQLException e){
+                return false;
+            }
+        }
+    }
+
     // Percorrer resultados
     public List<Map<String, Object>> percorrerResultados() throws SQLException {
         if (resultSet == null || resultSet.isClosed() || statement.isClosed() || connection.isClosed())
