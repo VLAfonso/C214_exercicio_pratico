@@ -55,7 +55,7 @@ public class ConexaoBD {
             throw new SQLException();
         else {
             try {
-                String query = "SELECT " + variable + " FROM " + tabela + " ORDER BY kredit DESC";
+                String query = "SELECT `" + variable + "` FROM " + tabela + " ORDER BY kredit DESC";
                 resultSet = statement.executeQuery(query);
                 return true;
             }catch (SQLException e){
