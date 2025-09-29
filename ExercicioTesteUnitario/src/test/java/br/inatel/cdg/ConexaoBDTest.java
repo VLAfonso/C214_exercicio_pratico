@@ -9,8 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ConexaoBDTest {
     // Testes de conexão
@@ -158,6 +157,7 @@ public class ConexaoBDTest {
         // Fazer um select das 5 primeiras linhas do dataset
         conexaobd.select("tabelaInvalida", 5);
     }
+
     @Test (expected = SQLSyntaxErrorException.class)
     public void testSelectQtdInvalida() throws SQLException {
         // Informações para conectar ao bd
@@ -176,7 +176,79 @@ public class ConexaoBDTest {
         conexaobd.select("germancredit", -2);
     }
 
+    @Test(expected = SQLSyntaxErrorException.class)
+    public void testSelectQtdNull() throws SQLException{
+        // Informações para conectar ao bd
+        String url = "jdbc:mysql://localhost:3306/statlog";
+        String user = "root";
+        String password = "root";
 
+        // Conexão com o bd
+        ConexaoBD conexaobd = new ConexaoBD(url, user, password);
+        conexaobd.conectar();
+
+        // Criação do statement
+        conexaobd.criarStatement();
+
+        // Fazer um select das 0 primeiras linhas do dataset
+        conexaobd.select("germancredit", null);
+    }
+
+    //Testes para seleção de dados dos indivíduos com maiores créditos
+    @Test
+    public void testOkayAnalyzeByCredit() throws SQLException{
+        // Informações para conectar ao bd
+        String url = "jdbc:mysql://localhost:3306/statlog";
+        String user = "root";
+        String password = "root";
+
+        // Conexão com o bd
+        ConexaoBD conexaobd = new ConexaoBD(url, user, password);
+        conexaobd.conectar();
+
+        // Criação do statement
+        conexaobd.criarStatement();
+
+        // Ordenar as idades de acordo com os maiores créditos do dataset
+        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit", "alter"); //idade
+
+        assertTrue(statusAnalyze);
+    }
+
+    @Test
+    public void testWrongVariableAnalyzeByCredit() throws SQLException{
+        // Informações para conectar ao bd
+        String url = "jdbc:mysql://localhost:3306/statlog";
+        String user = "root";
+        String password = "root";
+
+        // Conexão com o bd
+        ConexaoBD conexaobd = new ConexaoBD(url, user, password);
+        conexaobd.conectar();
+
+        // Criação do statement
+        conexaobd.criarStatement();
+
+        // Ordenar as idades de acordo com os maiores créditos do dataset
+        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit", "duration"); //duração do crédito (lauzfeit é o correto)
+
+        assertFalse(statusAnalyze);
+    }
+
+    @Test(expected = SQLException.class)
+    public void testNoStatementAnalyzeByCredit() throws SQLException{
+        // Informações para conectar ao bd
+        String url = "jdbc:mysql://localhost:3306/statlog";
+        String user = "root";
+        String password = "root";
+
+        // Conexão com o bd
+        ConexaoBD conexaobd = new ConexaoBD(url, user, password);
+        conexaobd.conectar();
+
+        // Ordenar as idades de acordo com os maiores créditos do dataset
+        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit", "duration"); //duração do crédito (lauzfeit é o correto)
+    }
 
     // Testes de percorrer resultado
     @Test
@@ -246,7 +318,20 @@ public class ConexaoBDTest {
         conexaobd.percorrerResultados();
     }
 
+    @Test(expected = SQLException.class)
+    public void testePercorrerSemStatementSet() throws SQLException{
+        // Informações para conectar ao bd
+        String url = "jdbc:mysql://localhost:3306/statlog";
+        String user = "root";
+        String password = "root";
 
+        // Conexão com o bd
+        ConexaoBD conexaobd = new ConexaoBD(url, user, password);
+        conexaobd.conectar();
+
+        // Tentar percorrer resultados sem statement (statement.isClosed())
+        conexaobd.percorrerResultados();
+    }
 
     // Teste de encerrar conexão
     @Test
