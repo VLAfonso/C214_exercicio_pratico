@@ -16,7 +16,42 @@ on:
     branches: [ "main" ]
 
 jobs:
+  setup-db:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # clonar o repositório
+    - uses: actions/checkout@v4
+
+    - name: Start MySQL
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql version: '8.0'
+        mysql database: 'statlog'
+        mysql root password: ${{ secrets.ROOT_PASSWORD }}
+        mysql user: 'root'
+        mysql password: ${{ secrets.USER_PASSWORD }}
+
+    - name: Install MySQL Client
+      run: sudo apt-get update && sudo apt-get install -y mysql-client
+    
+    - name: Import SQL Schema
+      run: mysql -h 127.0.0.1 -P 3306 -uroot -p${{ secrets.ROOT_PASSWORD }} < statlog-germancredit.sql
+
+    # criar e exportar artefato
+    - name: Save DB Status
+      run: echo "Database ready for testing." > db_status.txt
+    - name: Upload Setup DB Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: db_status
+        path: db_status.txt
+
+
   build:
+
+    needs: setup-db
 
     runs-on: ubuntu-latest
 
@@ -35,3 +70,60 @@ jobs:
       run: |
         cd ExercicioTesteUnitario
         mvn clean install -DskipTests
+
+    # exportar artefato
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: jar file
+        path: ExercicioTesteUnitario/target/*.jar
+
+  test:
+
+    needs: [setup-db, build]
+   
+    runs-on: ubuntu-latest
+
+    steps:
+    # clonar o repositório
+    - uses: actions/checkout@v4
+
+    # configurar MySQL
+    - name: Start MySQL
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql version: '8.0'
+        mysql database: 'statlog'
+        mysql root password: ${{ secrets.ROOT_PASSWORD }}
+        mysql user: 'root'
+        mysql password: ${{ secrets.USER_PASSWORD }}
+
+    - name: Install MySQL Client
+      run: sudo apt-get update && sudo apt-get install -y mysql-client
+    
+    - name: Import SQL Schema
+      run: mysql -h 127.0.0.1 -P 3306 -uroot -p${{ secrets.ROOT_PASSWORD }} < statlog-germancredit.sql
+
+    # configurar jdk
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+    # acessar pasta do projeto e executar testes
+      run: |
+        cd ExercicioTesteUnitario
+        mvn clean test site
+      env:
+        URL: ${{ secrets.URL }}
+        USER: 'root'
+        USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+    # exportar artefato
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: test report
+        path: ExercicioTesteUnitario/target/site/
