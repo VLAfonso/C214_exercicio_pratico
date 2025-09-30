@@ -3,7 +3,10 @@ package br.inatel.cdg;
 import br.inatel.cdg.ConexaoBD;
 
 import java.sql.SQLException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
