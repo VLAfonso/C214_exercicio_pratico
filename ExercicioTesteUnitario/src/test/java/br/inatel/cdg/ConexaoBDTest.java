@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class ConexaoBDTest {
     // Informações para conectar ao bd
@@ -159,7 +159,8 @@ public class ConexaoBDTest {
         conexaobd.criarStatement();
 
         // Ordenar as idades de acordo com os maiores créditos do dataset
-        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit", "alter"); //idade
+        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit",
+         "alter"); //idade
 
         assertTrue(statusAnalyze);
     }
@@ -174,7 +175,8 @@ public class ConexaoBDTest {
         conexaobd.criarStatement();
 
         // Ordenar as idades de acordo com os maiores créditos do dataset
-        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit", "duration"); //duração do crédito (lauzfeit é o correto)
+        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit",
+         "duration"); //duração do crédito (lauzfeit é o correto)
 
         assertFalse(statusAnalyze);
     }
@@ -186,7 +188,8 @@ public class ConexaoBDTest {
         conexaobd.conectar();
 
         // Ordenar as idades de acordo com os maiores créditos do dataset
-        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit", "duration"); //duração do crédito (lauzfeit é o correto)
+        boolean statusAnalyze = conexaobd.analyzeByCredit("germancredit",
+         "duration"); //duração do crédito (lauzfeit é o correto)
     }
 
     // Testes de percorrer resultado
