@@ -122,8 +122,37 @@ jobs:
         USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
 
     # exportar artefato
-    - name: Upload build artifact
+    - name: Upload test artifact
       uses: actions/upload-artifact@v4
       with:
         name: test report
+        path: ExercicioTesteUnitario/target/site/
+
+  quality:
+
+    needs: [setup-db, build]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # clonar o repositório
+    - uses: actions/checkout@v4
+    # configurar jdk
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+    # acessar pasta do projeto e executar verificação da qualidade do código
+      run: |
+        cd ExercicioTesteUnitario
+        mvn checkstyle:check
+
+    # exportar artefato
+    - name: Upload quality artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: quality report
         path: ExercicioTesteUnitario/target/site/
