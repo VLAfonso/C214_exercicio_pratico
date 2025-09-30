@@ -23,12 +23,11 @@ Instalar MySQL Client
         - [MySQL Installer completo](https://dev.mysql.com/downloads/installer/)
         - ou apenas [MySQL Community Server](https://dev.mysql.com/downloads/mysql/).
 
-Importar Schema SQL
-    
-    ```bash
-    mysql -h 127.0.0.1 -P 3306 -uroot -p${ROOT_PASSWORD} < statlog-germancredit.sql
-    ```
-    > :pushpin: **Notas:**  Substitua *${ROOT_PASSWORD}* pela senha do usuário root configurada no seu MySQL.
+Importar Schema SQL   
+```bash
+mysql -h 127.0.0.1 -P 3306 -uroot -p${ROOT_PASSWORD} < statlog-germancredit.sql
+```   
+> :pushpin: **Notas:**  Substitua *${ROOT_PASSWORD}* pela senha do usuário root configurada no seu MySQL.
     
 3. Configurar Credenciais e URL do Banco de Dados
 
