@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ConexaoBD {
+public class ConexaoBD {
     // Informações para conectar ao bd
     private String url;
     private String user;
