@@ -148,7 +148,7 @@ jobs:
     # acessar pasta do projeto e executar verificação da qualidade do código
       run: |
         cd ExercicioTesteUnitario
-        mvn checkstyle:check
+        mvn checkstyle:checkstyle
 
     # exportar artefato
     - name: Upload quality artifact
