@@ -8,7 +8,7 @@ O projeto realiza uma conexão com um banco de dados MySQL e apresenta as inform
 # :gear: Configuração e Execução
 1. Clonar o repositório
 ```bash
-git clone https://github.com/VLAfonso/C214_teste_unitario.git
+git clone https://github.com/VLAfonso/C214_exercicio_pratico.git
 cd C214_teste_unitario
 ```
 
