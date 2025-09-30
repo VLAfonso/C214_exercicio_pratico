@@ -156,3 +156,17 @@ jobs:
       with:
         name: quality report
         path: ExercicioTesteUnitario/target/site/
+
+  notify:
+    needs: test
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    # clonar o repositório
+      - uses: actions/checkout@v4
+      - name: Enviar Notificação sobre status do pipeline por Email
+        run: sh scripts/email_sender.sh #rodar o script shell que envia o email
+
+        env:
+          EMAIL_ADDRESS: ${{ vars.EMAIL_ADDRESS }} # <-- Uso da variável criada no GitHub Actions
