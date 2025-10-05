@@ -14,6 +14,7 @@ public class ConexaoBD {
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
+    private ResultSetMetaData metaData;
 
     public ConexaoBD(String url, String user, String password) {
         this.url = url;
@@ -21,9 +22,21 @@ public class ConexaoBD {
         this.password = password;
     }
 
+    public ConexaoBD(String url, String user, String password, Connection connection, Statement statement, ResultSet resultSet, ResultSetMetaData metaData) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+        this.connection = connection;
+        this.statement = statement;
+        this.resultSet = resultSet;
+        this.metaData = metaData;
+    }
+
     // Conexão com o bd
     public boolean conectar() throws SQLException {
-        connection = DriverManager.getConnection(url, user, password);
+        if(connection == null) {
+            connection = DriverManager.getConnection(url, user, password);
+        }
 
         return (connection != null && connection.isValid(2));
     }
@@ -69,7 +82,7 @@ public class ConexaoBD {
         if (resultSet == null || resultSet.isClosed() || statement.isClosed() || connection.isClosed())
             throw new SQLException();
         else {
-            ResultSetMetaData metaData = resultSet.getMetaData(); // pegar informações do dataset
+            metaData = resultSet.getMetaData(); // pegar informações do dataset
             int columnCount = metaData.getColumnCount(); // pegar num de colunas do dataset
 
             // Percorrer colunas e salvar dados
