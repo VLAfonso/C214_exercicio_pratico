@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class ConexaoBDTest {
+public class ConexaoBDIT {
     // Informações para conectar ao bd
     private String url = System.getenv("URL");
     private String user = System.getenv("USER");
@@ -131,7 +131,7 @@ public class ConexaoBDTest {
         // Criação do statement
         conexaobd.criarStatement();
 
-        // Fazer um select das 5 primeiras linhas do dataset
+        // Fazer um select com número inválido de linhas do dataset
         conexaobd.select("germancredit", -2);
     }
 
@@ -199,7 +199,7 @@ public class ConexaoBDTest {
         // Criação do statement
         conexaobd.criarStatement();
 
-        // Fazer um select das 5 primeiras linhas do dataset
+        // Fazer um select da primeira linha do dataset
         conexaobd.select("germancredit", 1);
 
         // Mostrar resultados
@@ -284,6 +284,8 @@ public class ConexaoBDTest {
         ConexaoBD conexaobd = new ConexaoBD(url, user, password);
 
         // Encerrar conexão
-        conexaobd.encerrar();
+        boolean statusEncerramento = conexaobd.encerrar();
+
+        assertTrue(statusEncerramento);
     }
 }
